@@ -33,7 +33,7 @@ class EncryptedStorage(ABC):
 
         self.salt_len = salt_len
 
-        self.nonce_len = 24  # please if you will use ChaCha20 change nonce generate logic. Read more about random nonce
+        self.nonce_len = 24
         self.tag_len = 16
         self.key_len = 32
 
