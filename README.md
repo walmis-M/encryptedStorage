@@ -2,7 +2,7 @@
 ![GitHub Stars](https://img.shields.io/github/stars/walmis-m/encryptedStorage)
 
 # EncryptedStorage
-A library for easily creating encrypted storage on any platform.
+A library for easily creating encrypted storage for small objects on any platform.
 Uses XChaCha20-Poly1305 and scrypt as the KDF.
 
 ## Quick start
