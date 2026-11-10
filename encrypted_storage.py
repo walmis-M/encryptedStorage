@@ -56,7 +56,6 @@ class EncryptedStorage(ABC):
 
         Args:
             salt: The salt bytes. Required if a string password is being used.
-            n: Scrypt N.
 
         Returns:
             A byte cryptographic key as bytes.
