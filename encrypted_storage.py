@@ -9,6 +9,8 @@ from Cryptodome.Protocol.KDF import scrypt
 import secrets
 import logging
 
+logger = logging.getLogger(__name__)
+
 
 class EncryptedStorage(ABC):
     """A class for securely storing and retrieving encrypted data in Storage.
@@ -43,7 +45,7 @@ class EncryptedStorage(ABC):
         elif isinstance(password, bytes):
             if len(password) != self.key_len:
                 raise ValueError("Password length must be equal to self.key_len")
-            logging.info("Using bytes as key")
+            logger.info("Using bytes as key")
             self.key = password
         else:
             raise ValueError("password must be str or bytes")
@@ -86,12 +88,12 @@ class EncryptedStorage(ABC):
                 - nonce (bytes): The byte initialization vector.
                 - salt (bytes): The salt used during key derivation.
         """
-        logging.info("Encrypting...")
+        logger.info("Encrypting...")
         nonce = secrets.token_bytes(self.nonce_len)
         salt = secrets.token_bytes(self.salt_len)
         cipher = ChaCha20_Poly1305.new(key=self.get_key(salt), nonce=nonce)
         enc, tag = cipher.encrypt_and_digest(data)
-        logging.info("Encrypted")
+        logger.info("Encrypted")
         return enc, tag, nonce, salt
 
     def decrypt(self, enc: bytes, tag: bytes, nonce: bytes, salt: bytes) -> bytes | None:
@@ -111,7 +113,7 @@ class EncryptedStorage(ABC):
         """
         if not enc:
             return None
-        logging.info("Decrypting...")
+        logger.info("Decrypting...")
         cipher = ChaCha20_Poly1305.new(key=self.get_key(salt), nonce=nonce)
         try:
             dec = cipher.decrypt_and_verify(enc, tag)
@@ -190,6 +192,6 @@ class EncryptedStorage(ABC):
                 except UnicodeDecodeError:
                     raise ValueError("Decode to string failed")
             else:
-                raise ValueError("Decryption failed")
+                return ""
         else:
             raise ValueError("No data to decrypt")
